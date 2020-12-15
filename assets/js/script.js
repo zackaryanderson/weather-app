@@ -2,14 +2,12 @@ var oldWeatherDataEl = document.querySelector("#old-results");
 var newWeatherDataEl = document.querySelector("#btn-find");
 var searchBoxEl = document.querySelector("#search");
 
+//get current date
+var currentDay = moment().format("dddd MMM Do");
+document.querySelector("#current-date").textContent = currentDay;
+
 //api key for openWeather
 var apiKey = "b43c1a31341671a27776ccb6e4eb19ba";
-
-//make first fetch to 
-//"http://api.openweathermap.org/data/2.5/weather?q=salt+lake+city&appid= + apiKey and store lat and lon data
-//then
-//make fetch request to:
-//"https://api.openweathermap.org/data/2.5/onecall?lat=" + lat + "&lon=" + lon + "&exclude={part}&appid=" + apiKey"
 
 var formSubmitHandler = function (event) {
     event.preventDefault();
@@ -62,15 +60,10 @@ var getWeatherInfo = function (searchTerm) {
             alert("Error: " + response.statusText);
         }
     });
-    //check status of response
-    //get info out of json response
-    //assign info to respective postions in html
-    //save search to list
     console.log(searchTerm);
 };
 
 var oldWeatherInfo = function (searchTerm) {
-    //get value of clicked element
     //make call to getWeatherInfo(value of clicked event)
     getWeatherInfo(searchTerm);
 };
@@ -110,6 +103,8 @@ var updateFutureWeather = function (data) {
     var fiveDayForecast = document.createElement("h3")
     fiveDayForecast.textContent = "5-Day Forecast";
     document.querySelector("#future-events").appendChild(fiveDayForecast);
+
+    //for loop to create and assign data for next five days
     for (var i = 0; i < 5; i++) {
         //create new card
         var dailyCard = document.createElement("div");
@@ -117,6 +112,11 @@ var updateFutureWeather = function (data) {
         //create new card body
         var dailyCardEl = document.createElement("div");
         dailyCardEl.classList = "card-body";
+        //create day header
+        var dayTitle = document.createElement("div");
+        dayTitle.classList = "card-title"
+        dayTitle.textContent = moment().add(i+1,"days").format("ddd");
+        dailyCardEl.appendChild(dayTitle);
         //create icon card img
         dailyCardIconHolder = document.createElement("div");
         dailyCardIconHolder.classList = "card-text";
@@ -140,18 +140,6 @@ var updateFutureWeather = function (data) {
 
         dailyCard.appendChild(dailyCardEl);
         document.querySelector("#future-events").appendChild(dailyCard);
-
-
-
-        // var humidity = data.daily[i].humidity;
-        // var temp = data.daily[i].temp.day;
-        // var icon = data.daily[i].weather[0].icon;
-        // //document.querySelector("#date-future").textContent = date;
-        // var img2 = document.createElement("img");
-        // img2.src = "http://openweathermap.org/img/w/" + icon + ".png";
-        // document.querySelector("#icon-future").appendChild(img2);
-        // document.querySelector("#temp-future").textContent = "Temp: " + temp + "°F";
-        // document.querySelector("#humidity-future").textContent = "Humidity: " + humidity + "%";
     }
 };
 

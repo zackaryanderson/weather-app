@@ -85,6 +85,8 @@ var updateCurrentWeather = function (temp, icon, humidity, wind, uvi, searchTerm
     document.querySelector("#city-name").appendChild(img);
 
     //update temperature, wind-speed, uv, and humidity elements from current weather
+    temp = (temp - 273.15) * 9/5 + 32;
+    temp = temp.toFixed(2);
     document.querySelector("#temperature").textContent = "Temperature: " + temp + "°F";
     document.querySelector("#wind-speed").textContent = "Wind Speed: " + wind + " MPH";
     document.querySelector("#humidity").textContent = "Humidity: " + humidity + "%";
@@ -102,6 +104,12 @@ var updateCurrentWeather = function (temp, icon, humidity, wind, uvi, searchTerm
 };
 
 var updateFutureWeather = function (data) {
+    //clear all previous data
+    document.querySelector("#future-events").textContent = '';
+    //fill in new data header
+    var fiveDayForecast = document.createElement("h3")
+    fiveDayForecast.textContent = "5-Day Forecast";
+    document.querySelector("#future-events").appendChild(fiveDayForecast);
     for (var i = 0; i < 5; i++) {
         //create new card
         var dailyCard = document.createElement("div");
@@ -117,8 +125,11 @@ var updateFutureWeather = function (data) {
         dailyCardIconHolder.appendChild(dailyCardIcon);
         dailyCardEl.appendChild(dailyCardIconHolder);
         //create temp card text
+        var temp = data.daily[i].temp.day
+        temp = (temp - 273.15) * 9/5 + 32; //convert kelvin to farenheit
+        temp = temp.toFixed(1);
         dailyCardTemp = document.createElement("div");
-        dailyCardTemp.textContent = "Temp: " + data.daily[i].temp.day + "°F";
+        dailyCardTemp.textContent = "Temp: " + temp + "°F";
         dailyCardTemp.classList = "card-text";
         dailyCardEl.appendChild(dailyCardTemp);
         //create humdity card text

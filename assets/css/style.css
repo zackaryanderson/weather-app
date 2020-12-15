@@ -15,3 +15,14 @@ ul li{
 a{
     text-decoration: none;
 }
+header{
+    text-align: center;
+    padding: 5px 0;
+    margin-bottom: 5px;
+}
+.card{
+    border-radius: 10px;
+}
+.future{
+    margin: 14px 0 0 8px;
+}

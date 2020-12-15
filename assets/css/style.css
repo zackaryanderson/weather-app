@@ -22,7 +22,12 @@ header{
 }
 .card{
     border-radius: 10px;
+    margin: 0 5px;
 }
 .future{
     margin: 14px 0 0 8px;
+}
+.uv-color{
+    padding: 2px 4px;
+    border-radius: 5px;
 }

@@ -24,30 +24,32 @@
                     class="oi oi-magnifying-glass text-light"></span></button>
             <div class="card">
                 <ul class="previous-searches list-group list-group-flush">
-                    <li class="list-group-item"><a class="text-dark" id="old-results" href="">Test City</a></li>
+                    <li class="list-group-item"><a class="text-dark" id="old-results" href="">Salt Lake City</a></li>
                 </ul>
             </div>
         </div>
         <div class="forecast col-8">
             <div class="card border-secondary">
                 <div class="card-body current">
-                    <h1 class="card-title" id="city-name">City Name (icon)</h1>
-                    <p class="card-text" id="temperature">Temperature: 10101010101 F</p>
-                    <p class="card-text" id="humidity">Humidity: 1010101010 %</p>
-                    <p class="card-text" id="wind-speed">Wind Speed: 400 MPH</p>
-                    <p class="card-text" id="uv-index">UV Index: <a class="bg-danger text-light">9.49</a></p>
+                    <h1 class="card-title" id="city-name">City Name
+                        <img id="icon" src="" alt="Weather Icon">
+                    </h1>
+                    <p class="card-text" id="temperature">Temperature:</p>
+                    <p class="card-text" id="humidity">Humidity:</p>
+                    <p class="card-text" id="wind-speed">Wind Speed:</p>
+                    <p class="card-text" id="uv-index">UV Index: <a id="uv-number" class="text-light uv-color"></a></p>
                 </div>
             </div>
-            <div class="future row">
+            <div class="future row" id="future-events">
                 <h3>5-Day Forecast:</h3>
-                <div class="col-2 card bg-primary text-light">
+                <!-- <div class="col-2 card bg-primary text-light">
                     <div class="card-body">
-                        <h6 class="card-title" id="date-future">Date</h6>
-                        <p class="card-text" id="icon-future">Icon</p>
+                        <h6 class="card-title" id="date-future"></h6>
+                        <p class="card-text" id="icon-future"></p>
                         <p class="card-text" id="temp-future">Temp: 89 F</p>
                         <p class="card-text" id="humidity-future">Humidity 43%</p>
                     </div>
-                </div>
+                </div> -->
             </div>
         </div>
     </main>

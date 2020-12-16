@@ -50,7 +50,7 @@ var oldWeatherClickHandler = function (event) {
 
 var getWeatherInfo = function (searchTerm) {
     //make fetch call if not empty
-    fetch("http://api.openweathermap.org/data/2.5/weather?q=" + searchTerm + "&appid=" + apiKey).then(function (response) {
+    fetch("https://api.openweathermap.org/data/2.5/weather?q=" + searchTerm + "&appid=" + apiKey).then(function (response) {
         if (response.ok) {
             response.json().then(function (data) {
                 var lat = data.coord.lat;

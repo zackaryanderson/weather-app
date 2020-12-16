@@ -1,6 +1,7 @@
 var oldWeatherDataEl = document.querySelector("#old-results");
 var newWeatherDataEl = document.querySelector("#btn-find");
 var searchBoxEl = document.querySelector("#search");
+var iter = 0;
 
 //get current date
 var currentDay = moment().format("dddd MMM Do");
@@ -11,6 +12,8 @@ var apiKey = "b43c1a31341671a27776ccb6e4eb19ba";
 
 var formSubmitHandler = function (event) {
     event.preventDefault();
+    //save info
+    saveInfo(searchBoxEl.value.trim());
 
     //get search term value from form in html
     var searchTerm = searchBoxEl.value.trim().split(' ').join('+');
@@ -27,6 +30,9 @@ var formSubmitHandler = function (event) {
 
 var oldWeatherClickHandler = function (event) {
     event.preventDefault();
+
+    //save info
+    saveInfo(event.target.text.trim());
 
     //pull value we want out of html
     var searchTerm = event.target.text.trim().split(' ').join('+');
@@ -78,8 +84,8 @@ var updateCurrentWeather = function (temp, icon, humidity, wind, uvi, searchTerm
     document.querySelector("#city-name").appendChild(img);
 
     //update temperature, wind-speed, uv, and humidity elements from current weather
-    temp = (temp - 273.15) * 9/5 + 32;
-    temp = temp.toFixed(2);
+    temp = (temp - 273.15) * 9 / 5 + 32;
+    temp = temp.toFixed(1);
     document.querySelector("#temperature").textContent = "Temperature: " + temp + "°F";
     document.querySelector("#wind-speed").textContent = "Wind Speed: " + wind + " MPH";
     document.querySelector("#humidity").textContent = "Humidity: " + humidity + "%";
@@ -108,14 +114,14 @@ var updateFutureWeather = function (data) {
     for (var i = 0; i < 5; i++) {
         //create new card
         var dailyCard = document.createElement("div");
-        dailyCard.classList = "col-2 card bg-primary text-light";
+        dailyCard.classList = "col-12 col-sm-6 col-md-6 col-lg-2 card bg-primary text-light";
         //create new card body
         var dailyCardEl = document.createElement("div");
         dailyCardEl.classList = "card-body";
         //create day header
         var dayTitle = document.createElement("div");
         dayTitle.classList = "card-title"
-        dayTitle.textContent = moment().add(i+1,"days").format("ddd");
+        dayTitle.textContent = moment().add(i + 1, "days").format("ddd");
         dailyCardEl.appendChild(dayTitle);
         //create icon card img
         dailyCardIconHolder = document.createElement("div");
@@ -126,7 +132,7 @@ var updateFutureWeather = function (data) {
         dailyCardEl.appendChild(dailyCardIconHolder);
         //create temp card text
         var temp = data.daily[i].temp.day
-        temp = (temp - 273.15) * 9/5 + 32; //convert kelvin to farenheit
+        temp = (temp - 273.15) * 9 / 5 + 32; //convert kelvin to farenheit
         temp = temp.toFixed(1);
         dailyCardTemp = document.createElement("div");
         dailyCardTemp.textContent = "Temp: " + temp + "°F";
@@ -143,8 +149,45 @@ var updateFutureWeather = function (data) {
     }
 };
 
+var saveInfo = function (string) {
+    if (iter > 7) {
+        iter = 0;
+    }
+    var locationString = JSON.parse(localStorage.getItem("location"));
+    locationString[iter] = string;
+    localStorage.setItem("location", JSON.stringify(locationString));
+    iter++;
+};
+
+var loadInfo = function () {
+    var locationString = JSON.parse(localStorage.getItem("location"));
+    document.querySelector("#previous-searches").textContent = "";
+    if (!locationString) {
+        locationString = [];
+        return locationString;
+    } else {
+        for (var i = 0; i < locationString.length; i++) {
+            var locationEl = document.createElement("li");
+            locationEl.classList = "list-group-item"
+            var locationAEl = document.createElement("a");
+            locationAEl.textContent = locationString[i];
+            locationAEl.classList = "text-dark";
+            locationAEl.id = "old-results";
+            //locationAEl.href = "_";
+            locationEl.appendChild(locationAEl);
+            document.querySelector("#previous-searches").appendChild(locationEl);
+        }
+        return locationString;
+    }
+};
+
 oldWeatherDataEl.addEventListener("click", oldWeatherClickHandler);
 newWeatherDataEl.addEventListener("click", formSubmitHandler);
+loadInfo();
+
+// setInterval(function() {
+//     loadInfo();
+// },2000);
 
 
 

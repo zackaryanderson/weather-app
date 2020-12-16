@@ -1,7 +1,6 @@
 var oldWeatherDataEl = document.querySelector("#old-results");
 var newWeatherDataEl = document.querySelector("#btn-find");
 var searchBoxEl = document.querySelector("#search");
-var iter = 0;
 
 //get current date
 var currentDay = moment().format("dddd MMM Do");
@@ -12,8 +11,7 @@ var apiKey = "b43c1a31341671a27776ccb6e4eb19ba";
 
 var formSubmitHandler = function (event) {
     event.preventDefault();
-    //save info
-    saveInfo(searchBoxEl.value.trim());
+    saveData();
 
     //get search term value from form in html
     var searchTerm = searchBoxEl.value.trim().split(' ').join('+');
@@ -24,15 +22,15 @@ var formSubmitHandler = function (event) {
     } else {
         alert("Please enter a location!");
     }
-
+    //reset search box
     searchBoxEl.value = "";
 }
 
 var oldWeatherClickHandler = function (event) {
     event.preventDefault();
+    saveData();
 
-    //save info
-    saveInfo(event.target.text.trim());
+    console.log(event.target);
 
     //pull value we want out of html
     var searchTerm = event.target.text.trim().split(' ').join('+');
@@ -59,6 +57,16 @@ var getWeatherInfo = function (searchTerm) {
                             updateCurrentWeather(temp, icon, humidity, wind, uvi, searchTerm);
                             updateFutureWeather(data);
                         });
+                        //add searched item to side bar
+                        var searchedLocationEl = document.createElement("li");
+                        searchedLocationEl.classList = "list-group-item";
+                        var searchedLocationClick = document.createElement("a");
+                        searchedLocationClick.textContent = searchTerm.split("+").join(" ");
+                        searchedLocationClick.classList = "text-dark";
+                        searchedLocationClick.id = "old-results";
+                        searchedLocationClick.href = "";
+                        searchedLocationEl.appendChild(searchedLocationClick);
+                        document.querySelector("#previous-searches").appendChild(searchedLocationEl);
                     };
                 });
             });
@@ -149,49 +157,41 @@ var updateFutureWeather = function (data) {
     }
 };
 
-var saveInfo = function (string) {
-    if (iter > 7) {
-        iter = 0;
+var saveData = function (){
+    var locations = [];
+    for ( var i = 0; i < document.getElementsByTagName("li").length; i++){
+        locations[i] = document.getElementsByTagName("li")[i].innerText;
+        localStorage.setItem("locations",JSON.stringify(locations));
     }
-    var locationString = JSON.parse(localStorage.getItem("location"));
-    locationString[iter] = string;
-    localStorage.setItem("location", JSON.stringify(locationString));
-    iter++;
+    console.log(locations);
 };
 
-var loadInfo = function () {
-    var locationString = JSON.parse(localStorage.getItem("location"));
-    document.querySelector("#previous-searches").textContent = "";
-    if (!locationString) {
-        locationString = [];
-        return locationString;
-    } else {
-        for (var i = 0; i < locationString.length; i++) {
-            var locationEl = document.createElement("li");
-            locationEl.classList = "list-group-item"
-            var locationAEl = document.createElement("a");
-            locationAEl.textContent = locationString[i];
-            locationAEl.classList = "text-dark";
-            locationAEl.id = "old-results";
-            //locationAEl.href = "_";
-            locationEl.appendChild(locationAEl);
-            document.querySelector("#previous-searches").appendChild(locationEl);
-        }
-        return locationString;
+var loadData = function() {
+    locations = JSON.parse(localStorage.getItem("locations"));
+    if (!locations){
+        locations = [];
     }
+
+    for (var i = 0; i < locations.length; i++){
+        //add searched item to side bar
+        var searchedLocationEl = document.createElement("li");
+        searchedLocationEl.classList = "list-group-item";
+        var searchedLocationClick = document.createElement("a");
+        searchedLocationClick.textContent = locations[i];
+        searchedLocationClick.classList = "text-dark";
+        searchedLocationClick.id = "old-results";
+        searchedLocationClick.href = "";
+        searchedLocationEl.appendChild(searchedLocationClick);
+        document.querySelector("#previous-searches").appendChild(searchedLocationEl);
+    }
+
 };
+
 
 oldWeatherDataEl.addEventListener("click", oldWeatherClickHandler);
 newWeatherDataEl.addEventListener("click", formSubmitHandler);
-loadInfo();
-
-// setInterval(function() {
-//     loadInfo();
-// },2000);
-
+loadData();
 
 
 //storage idea:
-//save in an array with a max of 8 values
-//always save new value as first in array and bump all values down
-//values > 8 are deleted
+//save data before page reload and reload data on href click

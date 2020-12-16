@@ -1,4 +1,4 @@
-var oldWeatherDataEl = document.querySelector("#old-results");
+var oldWeatherDataEl = document.querySelector("#previous-searches");
 var newWeatherDataEl = document.querySelector("#btn-find");
 var searchBoxEl = document.querySelector("#search");
 
@@ -19,6 +19,17 @@ var formSubmitHandler = function (event) {
     //call getWeatherInfo if there is a search term
     if (searchTerm) {
         getWeatherInfo(searchTerm);
+
+        //add searched item to side bar
+        var searchedLocationEl = document.createElement("li");
+        searchedLocationEl.classList = "list-group-item";
+        var searchedLocationClick = document.createElement("a");
+        searchedLocationClick.textContent = searchTerm.split("+").join(" ");
+        searchedLocationClick.classList = "text-dark";
+        searchedLocationClick.id = "old-results";
+        searchedLocationClick.href = "";
+        searchedLocationEl.appendChild(searchedLocationClick);
+        document.querySelector("#previous-searches").appendChild(searchedLocationEl);
     } else {
         alert("Please enter a location!");
     }
@@ -57,16 +68,6 @@ var getWeatherInfo = function (searchTerm) {
                             updateCurrentWeather(temp, icon, humidity, wind, uvi, searchTerm);
                             updateFutureWeather(data);
                         });
-                        //add searched item to side bar
-                        var searchedLocationEl = document.createElement("li");
-                        searchedLocationEl.classList = "list-group-item";
-                        var searchedLocationClick = document.createElement("a");
-                        searchedLocationClick.textContent = searchTerm.split("+").join(" ");
-                        searchedLocationClick.classList = "text-dark";
-                        searchedLocationClick.id = "old-results";
-                        searchedLocationClick.href = "";
-                        searchedLocationEl.appendChild(searchedLocationClick);
-                        document.querySelector("#previous-searches").appendChild(searchedLocationEl);
                     };
                 });
             });
@@ -184,14 +185,9 @@ var loadData = function() {
         searchedLocationEl.appendChild(searchedLocationClick);
         document.querySelector("#previous-searches").appendChild(searchedLocationEl);
     }
-
 };
 
 
 oldWeatherDataEl.addEventListener("click", oldWeatherClickHandler);
 newWeatherDataEl.addEventListener("click", formSubmitHandler);
 loadData();
-
-
-//storage idea:
-//save data before page reload and reload data on href click

@@ -2,12 +2,12 @@
 ## Purpose: 
 *Create a webpage where you can enter a location and get accurate weather information.
 
-##Built With:
+## Built With:
 *HTML
 *CSS
 *JavaScript
 
-##Webpage
+## Webpage
 [Weather App](https://zackaryanderson.github.io/weather-app/)
 
 ## Screenshot

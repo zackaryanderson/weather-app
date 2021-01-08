@@ -31,3 +31,6 @@ header{
     padding: 2px 4px;
     border-radius: 5px;
 }
+#city-name{
+    text-transform: capitalize;
+}
